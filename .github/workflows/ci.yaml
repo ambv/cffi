@@ -274,6 +274,7 @@ jobs:
         CIBW_TEST_COMMAND: pip install pip --upgrade; cd {project}; PYTHONUNBUFFERED=1 pytest
         MACOSX_DEPLOYMENT_TARGET: ${{ matrix.deployment_target || '10.13' }}
         SDKROOT: ${{ matrix.sdkroot || 'macosx' }}
+        CIBW_PLATFORM: ${{ contains(matrix.spec, 'ios') && 'ios' || 'auto' }}
       run: |
         set -eux
 
