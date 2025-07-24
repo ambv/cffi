@@ -231,12 +231,12 @@ jobs:
           #- { spec: cp314-macosx_arm64, deployment_target: '11.0', run_wrapper: 'arch -arm64 bash --noprofile --norc -eo pipefail {0}', cibw_version: cibuildwheel~=3.0b1 }
 
           # arm64 iOS device
-          - { spec: cp313-arm64_iphoneos, sdkroot: 'iphoneos', cibw_version: cibuildwheel~=3.1.0 }
-          - { spec: cp314-arm64_iphoneos, sdkroot: 'iphoneos', cibw_version: cibuildwheel~=3.1.0 }
+          - { spec: cp313-iphoneos_arm64, sdkroot: 'iphoneos', cibw_version: cibuildwheel~=3.1.0 }
+          - { spec: cp314-iphoneos_arm64, sdkroot: 'iphoneos', cibw_version: cibuildwheel~=3.1.0 }
 
           # arm64 iOS simulator
-          - { spec: cp313-arm64_iphonesimulator, sdkroot: 'iphonesimulator', cibw_version: cibuildwheel~=3.1.0 }
-          - { spec: cp314-arm64_iphonesimulator, sdkroot: 'iphonesimulator', cibw_version: cibuildwheel~=3.1.0 }
+          - { spec: cp313-iphonesimulator_arm64, sdkroot: 'iphonesimulator', cibw_version: cibuildwheel~=3.1.0 }
+          - { spec: cp314-iphonesimulator_arm64, sdkroot: 'iphonesimulator', cibw_version: cibuildwheel~=3.1.0 }
 
   macos:
     needs: [python_sdist, make_macos_matrix]
@@ -309,26 +309,26 @@ jobs:
         matrix_yaml: |
           include:
           # x86_64 windows
-          - { spec: cp39-win_amd64, omit: ${{ env.skip_ci_redundant_jobs }} }
-          - { spec: cp310-win_amd64, omit: ${{ env.skip_ci_redundant_jobs }} }
-          - { spec: cp311-win_amd64, omit: ${{ env.skip_ci_redundant_jobs }} }
-          - { spec: cp312-win_amd64, omit: ${{ env.skip_ci_redundant_jobs }} }
-          - { spec: cp313-win_amd64, omit: ${{ env.skip_ci_redundant_jobs }} }
-          - { spec: cp314-win_amd64, cibw_version: cibuildwheel~=3.0b1 }
+          #- { spec: cp39-win_amd64, omit: ${{ env.skip_ci_redundant_jobs }} }
+          #- { spec: cp310-win_amd64, omit: ${{ env.skip_ci_redundant_jobs }} }
+          #- { spec: cp311-win_amd64, omit: ${{ env.skip_ci_redundant_jobs }} }
+          #- { spec: cp312-win_amd64, omit: ${{ env.skip_ci_redundant_jobs }} }
+          #- { spec: cp313-win_amd64, omit: ${{ env.skip_ci_redundant_jobs }} }
+          #- { spec: cp314-win_amd64, cibw_version: cibuildwheel~=3.0b1 }
           
           # x86 windows
-          - { spec: cp39-win32, omit: ${{ env.skip_ci_redundant_jobs }} }
-          - { spec: cp310-win32, omit: ${{ env.skip_ci_redundant_jobs }} }
-          - { spec: cp311-win32, omit: ${{ env.skip_ci_redundant_jobs }} }
-          - { spec: cp312-win32, omit: ${{ env.skip_ci_redundant_jobs }} }
-          - { spec: cp313-win32, omit: ${{ env.skip_ci_redundant_jobs }} }
-          - { spec: cp314-win32, cibw_version: cibuildwheel~=3.0b1 }
+          #- { spec: cp39-win32, omit: ${{ env.skip_ci_redundant_jobs }} }
+          #- { spec: cp310-win32, omit: ${{ env.skip_ci_redundant_jobs }} }
+          #- { spec: cp311-win32, omit: ${{ env.skip_ci_redundant_jobs }} }
+          #- { spec: cp312-win32, omit: ${{ env.skip_ci_redundant_jobs }} }
+          #- { spec: cp313-win32, omit: ${{ env.skip_ci_redundant_jobs }} }
+          #- { spec: cp314-win32, cibw_version: cibuildwheel~=3.0b1 }
 
           # arm64 windows
-          - { spec: cp311-win_arm64, runs_on: windows-11-arm, omit: ${{ env.skip_ci_redundant_jobs }}, cibw_version: cibuildwheel~=3.0b1 }
-          - { spec: cp312-win_arm64, runs_on: windows-11-arm, omit: ${{ env.skip_ci_redundant_jobs }}, cibw_version: cibuildwheel~=3.0b1 }
-          - { spec: cp313-win_arm64, runs_on: windows-11-arm, omit: ${{ env.skip_ci_redundant_jobs }}, cibw_version: cibuildwheel~=3.0b1 }
-          - { spec: cp314-win_arm64, runs_on: windows-11-arm, cibw_version: cibuildwheel~=3.0b1 }
+          #- { spec: cp311-win_arm64, runs_on: windows-11-arm, omit: ${{ env.skip_ci_redundant_jobs }}, cibw_version: cibuildwheel~=3.0b1 }
+          #- { spec: cp312-win_arm64, runs_on: windows-11-arm, omit: ${{ env.skip_ci_redundant_jobs }}, cibw_version: cibuildwheel~=3.0b1 }
+          #- { spec: cp313-win_arm64, runs_on: windows-11-arm, omit: ${{ env.skip_ci_redundant_jobs }}, cibw_version: cibuildwheel~=3.0b1 }
+          #- { spec: cp314-win_arm64, runs_on: windows-11-arm, cibw_version: cibuildwheel~=3.0b1 }
 
   windows:
     needs: [python_sdist, make_windows_matrix]
