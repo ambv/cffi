@@ -129,6 +129,20 @@ def use_homebrew_for_libffi():
 is_ios = False
 ios_static_lib = None
 if sys.platform == 'darwin':
+    # Debug: Print all environment variables to see what's available in iOS builds
+    print("=== DEBUG: Environment variables ===")
+    for key, value in sorted(os.environ.items()):
+        if any(keyword in key.upper() for keyword in ['IOS', 'SDK', 'PLATFORM', 'TARGET', 'ARCH', 'COMPILER', 'CC', 'CXX', 'HOST', 'BUILD']):
+            print(f"{key}={value}")
+    print("=== DEBUG: sys.platform =", sys.platform)
+    print("=== DEBUG: platform.machine() =", platform.machine())
+    print("=== DEBUG: platform.system() =", platform.system())
+    print("=== DEBUG: platform.release() =", platform.release())
+    print("=== DEBUG: platform.version() =", platform.version())
+    print("=== END DEBUG ===")
+    # Force failure to see the output
+    raise RuntimeError("DEBUG: Intentional failure to inspect environment")
+    
     is_ios = (os.environ.get('SDKROOT', '').lower() in ['iphoneos', 'iphonesimulator'] or
               '_PYTHON_HOST_PLATFORM' in os.environ and
               ('iphoneos' in os.environ['_PYTHON_HOST_PLATFORM'] or
