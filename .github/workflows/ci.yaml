@@ -451,7 +451,7 @@ jobs:
         # CIBW_TEST_SKIP: "*-ios_*"
         CIBW_TEST_REQUIRES: pytest setuptools
         CIBW_TEST_SOURCES: cffi/src/c cffi/testing
-        CIBW_TEST_COMMAND: PYTHONUNBUFFERED=1 python -m pytest src/c/ testing/
+        CIBW_TEST_COMMAND: python -m pytest src/c/ testing/
         # Environment variables for the build
         CIBW_ENVIRONMENT: >
           CFLAGS="-I${LIBFFI_IOS_DIR}/include"
