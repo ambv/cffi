@@ -230,6 +230,14 @@ jobs:
           - { spec: cp313-macosx_arm64, deployment_target: '11.0', run_wrapper: 'arch -arm64 bash --noprofile --norc -eo pipefail {0}', omit: ${{ env.skip_ci_redundant_jobs }} }
           - { spec: cp314-macosx_arm64, deployment_target: '11.0', run_wrapper: 'arch -arm64 bash --noprofile --norc -eo pipefail {0}', cibw_version: cibuildwheel~=3.0b1 }
 
+          # arm64 iOS device
+          - { spec: cp313-macosx_arm64_iphoneos, sdkroot: 'iphoneos', cibw_version: cibuildwheel>=3.1.0 }
+          - { spec: cp314-macosx_arm64_iphoneos, sdkroot: 'iphoneos', cibw_version: cibuildwheel>=3.1.0 }
+
+          # arm64 iOS simulator
+          - { spec: cp313-macosx_arm64_iphonesimulator, sdkroot: 'iphonesimulator', cibw_version: cibuildwheel>=3.1.0 }
+          - { spec: cp314-macosx_arm64_iphonesimulator, sdkroot: 'iphonesimulator', cibw_version: cibuildwheel>=3.1.0 }
+
   macos:
     needs: [python_sdist, make_macos_matrix]
     defaults:

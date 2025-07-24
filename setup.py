@@ -1,6 +1,8 @@
 import sys, os, platform
 import subprocess
 import errno
+import urllib.request
+import tarfile
 
 # the setuptools distutils shim should make distutils available, but this will definitely do
 # it, since setuptools is now required at build-time
@@ -123,6 +125,15 @@ def use_homebrew_for_libffi():
     os.environ['PKG_CONFIG_PATH'] = (
         os.environ.get('PKG_CONFIG_PATH', '') + ':' + pkgconfig)
 
+# Detect iOS cross-compilation
+is_ios = False
+ios_static_lib = None
+if sys.platform == 'darwin':
+    is_ios = (os.environ.get('SDKROOT', '').lower() in ['iphoneos', 'iphonesimulator'] or
+              '_PYTHON_HOST_PLATFORM' in os.environ and
+              ('iphoneos' in os.environ['_PYTHON_HOST_PLATFORM'] or
+               'iphonesimulator' in os.environ['_PYTHON_HOST_PLATFORM']))
+
 if sys.platform == "win32" and uses_msvc():
     if platform.machine() == "ARM64":
         include_dirs.append(os.path.join("src/c/libffi_arm64/include"))
@@ -143,12 +154,41 @@ if sys.platform == "win32" and uses_msvc():
             extra_link_args.append(os.path.join(COMPILE_LIBFFI, 'win64.obj'))
         sources.extend(os.path.join(COMPILE_LIBFFI, filename)
                     for filename in _filenames)
+elif is_ios:
+    # iOS is cross-compiled, don't use pkg-config or system directories
+    print("Detected iOS cross-compilation")
+    
+    # Download pre-built libffi static library
+    libffi_version = os.environ.get('CFFI_IOS_LIBFFI_VERSION', '3.4.7-2')
+    ios_arch = 'arm64'
+    if 'iphonesimulator' in os.environ.get('SDKROOT', '').lower() or \
+       'iphonesimulator' in os.environ.get('_PYTHON_HOST_PLATFORM', ''):
+        ios_platform = 'iphonesimulator'
+    else:
+        ios_platform = 'iphoneos'
+    
+    # Download libffi from beeware/cpython-apple-source-deps
+    libffi_url = f'https://github.com/beeware/cpython-apple-source-deps/releases/download/libFFI-{libffi_version}/libffi-{libffi_version}-{ios_platform}.{ios_arch}.tar.gz'
+    libffi_dir = f'libffi-ios-{ios_platform}-{ios_arch}'
+    
+    if not os.path.exists(libffi_dir):
+        print(f"Downloading libffi for iOS ({ios_platform}-{ios_arch})...")
+        urllib.request.urlretrieve(libffi_url, 'libffi-ios.tar.gz')
+        with tarfile.open('libffi-ios.tar.gz', 'r:gz') as tar:
+            tar.extractall(libffi_dir)
+        os.remove('libffi-ios.tar.gz')
+    # Set up include and library paths for iOS
+    include_dirs[:] = [os.path.join(libffi_dir, 'include')]
+    library_dirs[:] = []
+    libraries[:] = []
+    # Store the static library path for later
+    ios_static_lib = os.path.join(libffi_dir, 'lib', 'libffi.a')
 else:
     use_pkg_config()
     ask_supports_thread()
     ask_supports_sync_synchronize()
 
-if 'darwin' in sys.platform:
+if 'darwin' in sys.platform and not is_ios:
     # priority is given to `pkg_config`, but always fall back on SDK's libffi.
     extra_compile_args += ['-iwithsysroot/usr/include/ffi']
 
@@ -159,6 +199,12 @@ if 'freebsd' in sys.platform:
 forced_extra_objs = os.environ.get('CFFI_FORCE_STATIC', [])
 if forced_extra_objs:
     forced_extra_objs = forced_extra_objs.split(';')
+else:
+    forced_extra_objs = []
+
+# Add iOS static library if detected
+if is_ios and ios_static_lib:
+    forced_extra_objs.append(ios_static_lib)
 
 
 if __name__ == '__main__':
