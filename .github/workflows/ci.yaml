@@ -452,7 +452,8 @@ jobs:
         # Environment variables for the build
         CIBW_ENVIRONMENT: >
           CFLAGS="-I${LIBFFI_IOS_DIR}/include"
-          LDFLAGS="${LIBFFI_IOS_DIR}/lib/libffi.a"
+          LDFLAGS="-L${LIBFFI_IOS_DIR}/lib"
+          CFFI_FORCE_STATIC="${LIBFFI_IOS_DIR}/lib/libffi.a"
           _CFFI_USE_EMBEDDING="0"
         # Pass through our custom env vars
         CIBW_ENVIRONMENT_PASS_LINUX: LIBFFI_IOS_DIR
