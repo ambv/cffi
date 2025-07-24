@@ -269,7 +269,7 @@ jobs:
       id: build
       env:
         CIBW_BUILD: ${{ matrix.spec }}
-        CIBW_BUILD_FRONTEND: ${{ contains(matrix.spec, 'ios') && 'pip' || 'build' }}
+        CIBW_BUILD_FRONTEND: ${{ contains(matrix.spec, 'ios') && 'pip; args: --no-use-pep517' || 'build' }}
         CIBW_ENABLE: cpython-prerelease
         CIBW_TEST_REQUIRES: pytest setuptools
         CIBW_TEST_COMMAND: pip install pip --upgrade; cd {project}; PYTHONUNBUFFERED=1 pytest
