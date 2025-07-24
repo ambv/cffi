@@ -450,7 +450,7 @@ jobs:
         CIBW_TEST_REQUIRES: pytest setuptools
         CIBW_TEST_SOURCES: cffi
         # Running tests from `testing/` will not work since they try to compile C code on device
-        CIBW_TEST_COMMAND: python -m pytest cffi/src/c/
+        CIBW_TEST_COMMAND: python -u -m pytest cffi/src/c/
         # Environment variables for the build
         CIBW_ENVIRONMENT: >
           CFLAGS="-I${LIBFFI_IOS_DIR}/include"
