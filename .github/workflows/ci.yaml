@@ -450,14 +450,14 @@ jobs:
         # Skip tests for iOS builds as they require a device/simulator
         # CIBW_TEST_SKIP: "*-ios_*"
         CIBW_TEST_REQUIRES: pytest setuptools
-        CIBW_TEST_SOURCES: src/c testing
+        CIBW_TEST_SOURCES: cffi/src/c cffi/testing
         CIBW_TEST_COMMAND: PYTHONUNBUFFERED=1 python -m pytest src/c/ testing/
         # Environment variables for the build
         CIBW_ENVIRONMENT: >
           CFLAGS="-I${LIBFFI_IOS_DIR}/include"
           LDFLAGS="-L${LIBFFI_IOS_DIR}/lib"
         # Pass through our custom env vars
-        CIBW_ENVIRONMENT_PASS_LINUX: LIBFFI_IOS_DIR
+        CIBW_ENVIRONMENT_PASS_IOS: LIBFFI_IOS_DIR
         # Tools needed for cross-compilation (if any)
         CIBW_XBUILD_TOOLS_IOS: ""
       run: |
