@@ -447,19 +447,16 @@ jobs:
         CIBW_ENABLE: cpython-prerelease
         CIBW_PLATFORM: ios
         SDKROOT: ${{ matrix.platform }}
-        # Skip tests for iOS builds as they require a device/simulator
-        # CIBW_TEST_SKIP: "*-ios_*"
         CIBW_TEST_REQUIRES: pytest setuptools
         CIBW_TEST_SOURCES: cffi
-        CIBW_TEST_COMMAND: python -m pytest cffi/src/c/ cffi/testing/
+        # Running tests from `testing/` will not work since they try to compile C code on device
+        CIBW_TEST_COMMAND: python -m pytest cffi/src/c/
         # Environment variables for the build
         CIBW_ENVIRONMENT: >
           CFLAGS="-I${LIBFFI_IOS_DIR}/include"
           LDFLAGS="-L${LIBFFI_IOS_DIR}/lib"
         # Pass through our custom env vars
         CIBW_ENVIRONMENT_PASS_IOS: LIBFFI_IOS_DIR
-        # Tools needed for cross-compilation (if any)
-        CIBW_XBUILD_TOOLS_IOS: ""
       run: |
         set -eux
 
