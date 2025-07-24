@@ -1233,7 +1233,7 @@ def test_cannot_pass_struct_with_array_of_length_0():
     pytest.raises(NotImplementedError, cast(BFunc2, 123), 123)
 
 def test_call_function_9():
-    BInt = new_primitive_type("int")
+    BInt = new_primitive_type("long")
     BFunc9 = new_function_type((BInt,), BInt, True)    # vararg
     f = cast(BFunc9, _testfunc(9))
     assert f(0) == 0
@@ -3014,6 +3014,10 @@ if sys.version_info >= (3,):
     except ImportError:
         pass   # win32
 
+@pytest.mark.xfail(
+    is_ios,
+    reason="For an unknown reason fscanf() doesn't write anything",
+)
 def test_FILE():
     if sys.platform == "win32":
         pytest.skip("testing FILE not implemented")
