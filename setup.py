@@ -128,6 +128,7 @@ def use_homebrew_for_libffi():
 # Detect iOS cross-compilation
 is_ios = False
 ios_static_lib = None
+print("=== PLATFORM ===" , sys.platform)
 if sys.platform == 'darwin':
     # Debug: Print all environment variables to see what's available in iOS builds
     print("=== DEBUG: Environment variables ===")
