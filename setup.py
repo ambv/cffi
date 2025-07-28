@@ -223,6 +223,7 @@ if is_ios and ios_static_lib:
 
 
 if __name__ == '__main__':
+    print("=== OUR NAME IS MAIN ===")
     from setuptools import setup, Distribution, Extension
 
     class CFFIDistribution(Distribution):
